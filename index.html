@@ -1,0 +1,25 @@
+{ id: 11, category: 'station', name: 'Khay bưng oval/tròn lớn', note: 'Kiểm tra miếng lót chống trượt.', target: 30, unit: 'Cái', status: 'pending', issues: 0 },
+          { id: 12, category: 'station', name: 'Xô đá ướp & Khui rượu', note: 'Trang bị đủ cho các trạm.', target: 25, unit: 'Bộ', status: 'pending', issues: 0 }
+        ]);
+        
+        const filteredItems = computed(() => items.value.filter(i => i.category === activeCat.value));
+        const getStatus = (catId) => {
+          const catItems = items.value.filter(i => i.category === catId);
+          return `${catItems.filter(i => i.status === 'ok').length}/${catItems.length}`;
+        };
+        const completedCount = computed(() => items.value.filter(i => i.status === 'ok').length);
+        const toggleStatus = (item) => item.status = item.status === 'ok' ? 'pending' : 'ok';
+        
+        const submit = () => {
+          const issues = items.value.filter(i => i.issues > 0);
+          let msg = `BÁO CÁO SETUP GALA DINNER\nTiến độ: ${completedCount.value}/${items.value.length}\n`;
+          if (issues.length > 0) {
+            msg += `\nCẦN BỔ SUNG GẤP TỪ KHO:\n`;
+            issues.forEach(i => msg += `- ${i.name}: Thiếu/Hỏng ${i.issues} ${i.unit}\n`);
+          } else {
+            msg += `\nĐã sẵn sàng mọi thiết bị!`;
+          }
+          alert(msg);
+        };
+        
+        return { activeCat, categories, items, filteredItems, getStatus, completedCount, toggleStatus, submit }
